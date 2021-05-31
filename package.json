@@ -4,7 +4,10 @@
   "description": "chess analysis tool and pgn editor",
   "main": "src/main/main.js",
   "scripts": {
-    "test": "electron . "
+    "test": "electron . ",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "keywords": [
     "chess",
@@ -13,20 +16,56 @@
     "electron"
   ],
   "author": "dz1230",
-  "license": "UNLICENSED",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "url": "https://github.com/dz1230/chessalyze"
+  },
   "dependencies": {
     "axios": "^0.21.1",
     "chessground": "^7.11.1",
     "chessops": "^0.8.1",
     "d3": "^6.7.0",
-    "electron": "^12.0.5",
+    "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.6.0",
     "pgn-parser": "^2.1.1",
     "popper.js": "^1.16.1"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.57",
+    "@electron-forge/maker-deb": "^6.0.0-beta.57",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.57",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.57",
+    "@electron-forge/maker-zip": "^6.0.0-beta.57",
     "@types/d3": "^6.3.0",
     "@types/electron": "^1.6.10",
-    "@types/node": "^14.14.41"
+    "@types/node": "^14.14.41",
+    "electron": "^12.0.9"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "chessalyze"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }
