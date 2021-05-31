@@ -1,0 +1,1 @@
+global.exports = Object.assign({}, global.exports)

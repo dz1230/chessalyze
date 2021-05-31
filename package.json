@@ -1,0 +1,32 @@
+{
+  "name": "chessalyze",
+  "version": "1.0.0",
+  "description": "chess analysis tool and pgn editor",
+  "main": "src/main/main.js",
+  "scripts": {
+    "test": "electron . "
+  },
+  "keywords": [
+    "chess",
+    "pgn",
+    "typescript",
+    "electron"
+  ],
+  "author": "dz1230",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chessground": "^7.11.1",
+    "chessops": "^0.8.1",
+    "d3": "^6.7.0",
+    "electron": "^12.0.5",
+    "jquery": "^3.6.0",
+    "pgn-parser": "^2.1.1",
+    "popper.js": "^1.16.1"
+  },
+  "devDependencies": {
+    "@types/d3": "^6.3.0",
+    "@types/electron": "^1.6.10",
+    "@types/node": "^14.14.41"
+  }
+}

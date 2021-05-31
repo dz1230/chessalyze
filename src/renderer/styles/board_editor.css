@@ -1,0 +1,69 @@
+html, body, .master {
+    width: 100%;
+    height: 100%;
+}
+
+.master {
+    padding: 1em;
+    overflow: auto;
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 1fr 480px 1fr;
+    grid-template-rows: min-content 480px auto;
+    grid-template-areas: 
+    "space1 actions space2"
+    "whitepieces board blackpieces"
+    "whitepieces inputs blackpieces";
+}
+
+#space_1 {grid-area: space1;}
+#space_2 {grid-area: space2;}
+
+#actions {
+    grid-area: actions;
+}
+#board {
+    grid-area: board;
+}
+#inputs {
+    grid-area: inputs;
+}
+
+#white_pieces {
+    grid-area: whitepieces;
+    justify-content: right;
+}
+#black_pieces {
+    grid-area: blackpieces;
+    justify-content: left;
+}
+#white_pieces, #black_pieces {
+    display: grid;
+    grid-template-columns: min-content;
+}
+.list-pieces {
+    display: table;
+    padding: 0.5em;
+    border-radius: 1em;
+}
+.list-pieces piece {
+    display: block;
+    cursor: default;
+    width: 60px;
+    height: 60px;
+    background-repeat: round !important;
+}
+.list-pieces piece.cursor {
+    background: url('../../../assets/editor/cursor.svg');
+}
+.list-pieces piece.trash {
+    background: url('../../../assets/editor/trash-can.svg');
+}
+.list-pieces piece:not(.active):hover {
+    background-color: var(--light);
+}
+.list-pieces piece.active {
+    border: 2pt solid var(--primary);
+    background-color: var(--primary);
+    border-radius: 5pt;
+}

@@ -1,0 +1,381 @@
+html, body {
+    height: 100%;
+}
+
+.master {
+    height: 100%;
+    overflow: auto;
+    padding: 1em;
+    display: grid;
+    gap: 1em;
+    grid-template-columns: min-content 480px 280px 1fr;
+    grid-template-rows: 480px minmax(280px, 1fr);
+    grid-template-areas: 
+        "clocks board tabs tabs"
+        "annotation annotation engine engine";
+}
+
+#clocks {
+    grid-area: clocks;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+.clock {
+    text-align: right;
+}
+.clock > span {
+    padding: 4pt;
+    border-radius: 4pt;
+}
+.clock.ticking > span {
+    background-color: var(--danger);
+    color: var(--light);
+}
+.player {
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    padding: 2pt;
+}
+#player_top, #player_bottom {
+    text-align: right;
+}
+#actionbar {
+    white-space: nowrap;
+}
+#title_top, #title_bottom {
+    color: goldenrod;
+    padding-left: 4pt;
+}
+
+#boardarea {
+    grid-area: board;
+}
+#board {
+    pointer-events: all;
+}
+#promotion_popup {
+    pointer-events: all;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: -100%;
+    z-index: 10555;
+    background-color: rgba(0,0,0,.25);
+}
+#promotion_popup square {
+    position: absolute;
+    width: 12.5%;
+    height: 12.5%;
+    border-radius: 25%;
+    background-color: var(--white);
+}
+#promotion_popup square:hover {
+    background-color: var(--primary);
+}
+#promotion_popup square piece {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+}
+
+#engine {
+    grid-area: engine;
+    padding-top: 1em;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+.engine-link span {
+    padding-right: 2pt;
+    margin-right: 2pt;
+}
+.bestmove {
+    color: var(--primary);
+}
+.engine-link .close {
+    color: unset;
+}
+.engine {
+    display: grid;
+}
+#engine_tabs > div[role="tabpanel"] {
+    height: 100%;
+}
+#engine_tabs > div[role="tabpanel"].active {
+    display: flex !important;
+}
+
+.lichess-engine {
+    flex-grow: 1;
+    gap: 0.5em;
+    grid-template-rows: min-content auto min-content 1fr;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: 
+    "analysisheader analysisheader"
+    "analstats analpvs"
+    "explorerheader explorerheader"
+    "explorer explorer";
+}
+.lichess-engine > .analysis_header {
+    grid-area: analysisheader;
+}
+.lichess-engine > .analstats {
+    grid-area: analstats;
+}
+.lichess-engine > .analpvs {
+    grid-area: analpvs;
+}
+.lichess-engine > .analpvs > .engine-pv {
+    overflow: hidden;
+    white-space: nowrap;
+}
+.lichess-engine > .explorerheader {
+    grid-area: explorerheader;
+}
+.lichess-engine > .explorer {
+    grid-area: explorer;
+    padding: 0 0.5em;
+}
+
+.wdb-bar {
+    display: grid;
+    grid-template-rows: auto;
+    margin: 2pt 0;
+}
+.wdb-bar > span {
+    text-align: center;
+}
+.wdb-w {
+    background-color: var(--light);
+    color: var(--dark);
+}
+.wdb-d {
+    background-color: grey;
+    color: var(--light);
+}
+.wdb-b {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+.op-game span:first-child {
+    width: 25px;
+}
+.op-move-san {
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.op-explorer .op-game:hover, .op-explorer .op-move:hover, .tb-explorer .tb-move:hover {
+    background-color: var(--light);
+}
+
+.uci-engine {
+    flex-grow: 1;
+    gap: 0.5em;
+    grid-template-columns: min-content auto min-content min-content 1fr;
+    grid-template-rows: min-content auto min-content 1fr;
+    grid-template-areas: 
+    "status name name authors path"
+    "actions actions stats stats stats"
+    "customactions pv pv pv pv"
+    "customactions console console console console";
+}
+#enginelist {
+    max-height: 99vh;
+    overflow-y: auto;
+}
+.engine-status {
+    color: var(--info);
+    grid-area: status;
+}
+.engine-name {
+    grid-area: name;
+}
+.engine-authors {
+    grid-area: authors;
+}
+.engine-executable-path {
+    grid-area: path;
+}
+.engine-actions {
+    grid-area: actions;
+}
+.engine-current-stats {
+    grid-area: stats;
+}
+.engine-custom-actions {
+    grid-area: customactions;
+}
+.engine-principal-variations {
+    grid-area: pv;
+}
+.engine-info-console {
+    border-top: 1pt solid var(--secondary);
+    background-color: var(--light);
+    grid-area: console;
+    overflow-y: auto;
+    padding: 2pt;
+}
+.engine-string {
+    white-space: nowrap;
+    text-align: center;
+    padding: 2pt;
+}
+.engine-action {
+    padding: 2pt;
+}
+.engine-action:not(.disabled) {
+    cursor: pointer;
+}
+.engine-action:not(.disabled):hover {
+    background-color: var(--light);
+}
+.engine-action > img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin: auto;
+}
+.engine-action > span {
+    margin-top: 1em;
+    text-align: center;
+    min-width: 32px;
+    display: block;
+    white-space: nowrap;
+}
+.engine-stat {
+    padding: 2pt;
+    text-align: center;
+}
+.engine-stat-big, .engine-stat-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+}
+.engine-stat-big {
+    font-size: 14pt;
+    text-align: center;
+    white-space: nowrap;
+}
+.engine-stat-small {
+    font-size: 10pt;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-width: 128px;
+}
+.engine-stat-name {
+    font-size: 11pt;
+    text-align: center;
+    margin-top: 1em;
+    white-space: nowrap;
+}
+.engine-pv {
+    border-bottom: 2pt solid var(--secondary);
+    cursor: pointer;
+}
+.engine-pv:hover {
+    background-color: var(--light);
+}
+#configure_uci_engine_uci_options {
+    display: grid;
+    gap: 2pt;
+    grid-template-columns: auto auto;
+}
+#configure_uci_engine_uci_options label:not(.form-check-label) {
+    width: 100%;
+}
+
+#annotation {
+    grid-area: annotation;
+    padding-top: 1em;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+}
+#comments, #nags {
+    padding-top: 1em;
+}
+#nags {
+    white-space: nowrap;
+}
+.nag-btn::before {
+    content: attr(data-nag-symbol);
+    padding: 2pt;
+    margin-right: 1em;
+}
+.nag-btn {
+    cursor: default;
+    white-space: nowrap;
+}
+.nag-item:not(.list-group-item-primary):hover {
+    background-color: var(--light);
+}
+.comment {
+    font-family: 'Segoe UI', sans-serif;
+    width: 100%;
+    border: none;
+    border-bottom: 1pt solid var(--light);
+    outline: none;
+}
+.comment:focus {
+    border: 1pt solid var(--light);
+}
+
+#tabs {
+    grid-area: tabs;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+}
+#gamelist {
+    max-height: 99vh;
+    overflow-y: auto;
+}
+.game.current {
+    text-decoration: underline;
+}
+.tag {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.tag .close {
+    color: inherit;
+    float: none;
+}
+#moves {
+    min-width: 300px;
+    padding: 0.5em;
+}
+.move {
+    display: inline-block;
+    padding: 2pt;
+    border-radius: 2pt;
+    font-size: 12pt;
+    cursor: default;
+}
+.move:hover {
+    background-color: var(--light);
+}
+.move.active {
+    background-color: var(--light);
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+}
+.variation.main > .move {
+    font-size: 13pt;
+}
+
+#toasts {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 20000;
+    padding: 0.7em;
+    pointer-events: none;
+}
+.toast {
+    pointer-events: all;
+}

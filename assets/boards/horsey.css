@@ -1,0 +1,12 @@
+cg-board {
+    background-image: url('./img/horsey.jpg');
+}
+cg-board square.last-move {
+    background: url('./img/horsey.last-move.png');
+}
+cg-board square.selected {
+    background: url('./img/horsey.selected.png');
+}
+cg-board square.oc.move-dest {
+    background: url('./img/horsey.move-dest.png');
+}

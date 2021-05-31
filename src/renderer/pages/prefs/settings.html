@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+        <link id="theme_sheet" rel="stylesheet" type="text/css" href="../../../../assets/themes/bootstrap-lumen-4.6.0.min.css" />
+    </head>
+    <body>
+        <div class="container p-2">
+            <div class="row">
+                <div class="col">
+                    <form>
+                        <h4>General</h4>
+                        <!--div class="form-group">
+                            <label for="language">Language</label>
+                            <select id="language" class="custom-select" name="language">
+                                <option value="english">English</option>
+                            </select>
+                        </div-->
+                        <div class="custom-control custom-checkbox">
+                            <input id="rookCastle" class="custom-control-input" type="checkbox" name="rookCastle" value="true">
+                            <label for="rookCastle" class="custom-control-label" title="Castle by moving king onto rook">Rook castling</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input id="snapArrowsToValidMove" class="custom-control-input" type="checkbox" name="snapArrowsToValidMove" value="true">
+                            <label for="snapArrowsToValidMove" class="custom-control-label">Snap arrows to valid moves</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input id="eraseArrowsOnClick" class="custom-control-input" type="checkbox" name="eraseArrowsOnClick" value="true">
+                            <label for="eraseArrowsOnClick" class="custom-control-label">Erase arrows on click</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input id="showDests" class="custom-control-input" type="checkbox" name="showDests" value="true">
+                            <label for="showDests" class="custom-control-label">Show valid destinations</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input id="coordinates" class="custom-control-input" type="checkbox" name="coordinates" value="true">
+                            <label for="coordinates" class="custom-control-label">Show board coordinates</label>
+                        </div>
+                        <!--div class="form-group">
+                            <label for="sound">Sound</label>
+                            <select id="sound" class="custom-select" name="sound">
+                                <option value="silent">Silent</option>
+                            </select>
+                        </div-->
+                        <!--h4>Engines</h4>
+                        <div class="form-group">
+                            <label for="dbSource">Lichess opening explorer database:</label>
+                            <select id="dbSource" class="custom-select" name="dbSource">
+                                <option value="master">Master games</option>
+                            </select>
+                        </div-->
+                        <div class="form-group">
+                            <label for="infoConsoleLines">Lines in engine info console:</label>
+                            <input id="infoConsoleLines" class="form-control" type="number" name="infoConsoleLines" value="50" min="0" max="99">
+                        </div>
+                        <h4>Appearance</h4>
+                        <div class="custom-control custom-checkbox">
+                            <input id="ghost" class="custom-control-input" type="checkbox" name="ghost" value="true">
+                            <label for="ghost" class="custom-control-label">Show piece ghost</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input id="animation" class="custom-control-input" type="checkbox" name="animation" value="true">
+                            <label for="animation" class="custom-control-label">Piece animations</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input id="highlightLastMove" class="custom-control-input" type="checkbox" name="highlightLastMove" value="true">
+                            <label for="highlightLastMove" class="custom-control-label">Highlight last move</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input id="highlightCheck" class="custom-control-input" type="checkbox" name="highlightCheck" value="true">
+                            <label for="highlightCheck" class="custom-control-label">Highlight check</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="btrapTheme">Theme</label>
+                            <select id="btrapTheme" class="custom-select" name="btrapTheme">
+                                <option value="../../../../assets/themes/bootstrap-lumen-4.6.0.min.css">Lumen</option>
+                                <option value="../../../../assets/themes/bootstrap-darkly-4.6.0.min.css">Darkly</option>
+                                <option value="../../../../assets/themes/bootstrap-litera-4.6.0.min.css">Litera</option>
+                                <option value="../../../../assets/themes/bootstrap-solar-4.6.0.min.css">Solar</option>
+                                <option value="../../../../assets/themes/bootstrap-cyborg-4.6.0.min.css">Cyborg</option>
+                                <option value="../../../../assets/themes/bootstrap-united-4.6.0.min.css">United</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="board">Board</label>
+                            <select id="board" class="custom-select" name="board">
+                                <option value="../../../../assets/boards/darksquares.css">Blind</option>
+                                <option value="../../../../assets/boards/blue-marble.css">Blue marble</option>
+                                <option value="../../../../assets/boards/blue.css">Blue (1)</option>
+                                <option value="../../../../assets/boards/blue2.css">Blue (2)</option>
+                                <option value="../../../../assets/boards/blue3.css">Blue (3)</option>
+                                <option value="../../../../assets/boards/brown.css">Brown</option>
+                                <option value="../../../../assets/boards/canvas.css">Canvas</option>
+                                <option value="../../../../assets/boards/green.css">Green</option>
+                                <option value="../../../../assets/boards/green-plastic.css">Green plastic</option>
+                                <option value="../../../../assets/boards/grey.css">Grey</option>
+                                <option value="../../../../assets/boards/horsey.css">Horsey</option>
+                                <option value="../../../../assets/boards/ic.css">IC</option>
+                                <option value="../../../../assets/boards/leather.css">Leather</option>
+                                <option value="../../../../assets/boards/maple.css">Maple (1)</option>
+                                <option value="../../../../assets/boards/maple2.css">Maple (2)</option>
+                                <option value="../../../../assets/boards/marble.css">Marble</option>
+                                <option value="../../../../assets/boards/metal.css">Metal</option>
+                                <option value="../../../../assets/boards/newspaper.css">Newspaper</option>
+                                <option value="../../../../assets/boards/olive.css">Olive</option>
+                                <option value="../../../../assets/boards/pink-pyramid.css">Pink-pyramid</option>
+                                <option value="../../../../assets/boards/purple-diag.css">Purple (1)</option>
+                                <option value="../../../../assets/boards/purple.css">Purple (2)</option>
+                                <option value="../../../../assets/boards/wood.css">Wood (1)</option>
+                                <option value="../../../../assets/boards/wood2.css">Wood (2)</option>
+                                <option value="../../../../assets/boards/wood3.css">Wood (3)</option>
+                                <option value="../../../../assets/boards/wood4.css">Wood (4)</option>
+                                <option value="../../../../assets/boards/yellow.css">Yellow</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pieceset">Pieces</label>
+                            <select id="pieceset" class="custom-select" name="pieceset">
+                                <option value="../../../../assets/piecesets/alpha.css">alpha</option>
+                                <option value="../../../../assets/piecesets/california.css">california</option>
+                                <option value="../../../../assets/piecesets/cardinal.css">cardinal</option>
+                                <option value="../../../../assets/piecesets/cburnett.css">cburnett</option>
+                                <option value="../../../../assets/piecesets/chess7.css">chess7</option>
+                                <option value="../../../../assets/piecesets/chessnut.css">chessnut</option>
+                                <option value="../../../../assets/piecesets/companion.css">companion</option>
+                                <option value="../../../../assets/piecesets/dubrovny.css">dubrovny</option>
+                                <option value="../../../../assets/piecesets/fantasy.css">fantasy</option>
+                                <option value="../../../../assets/piecesets/fresca.css">fresca</option>
+                                <option value="../../../../assets/piecesets/gioco.css">gioco</option>
+                                <option value="../../../../assets/piecesets/governor.css">governor</option>
+                                <option value="../../../../assets/piecesets/horsey.css">horsey</option>
+                                <option value="../../../../assets/piecesets/icpieces.css">icpieces</option>
+                                <option value="../../../../assets/piecesets/kosal.css">kosal</option>
+                                <option value="../../../../assets/piecesets/leipzig.css">leipzig</option>
+                                <option value="../../../../assets/piecesets/letter.css">letter</option>
+                                <option value="../../../../assets/piecesets/libra.css">libra</option>
+                                <option value="../../../../assets/piecesets/maestro.css">maestro</option>
+                                <option value="../../../../assets/piecesets/merida.css">merida</option>
+                                <option value="../../../../assets/piecesets/pirouetti.css">pirouetti</option>
+                                <option value="../../../../assets/piecesets/pixel.css">pixel</option>
+                                <option value="../../../../assets/piecesets/reillycraig.css">reillycraig</option>
+                                <option value="../../../../assets/piecesets/riohacha.css">riohacha</option>
+                                <option value="../../../../assets/piecesets/shapes.css">shapes</option>
+                                <option value="../../../../assets/piecesets/spatial.css">spatial</option>
+                                <option value="../../../../assets/piecesets/staunty.css">staunty</option>
+                                <option value="../../../../assets/piecesets/tatiana.css">tatiana</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="orientation">Board orientation</label>
+                            <select id="orientation" class="custom-select" name="orientation">
+                                <option value="white">White</option>
+                                <option value="black">Black</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="../../scripts/define-exports.js" type="text/javascript"></script>
+        <script src="../../scripts/bootstrap-4.6.0.min.js" type="text/javascript"></script>
+        <script src="../../scripts/prefs/settings.js" type="text/javascript"></script>
+    </body>
+</html>
+

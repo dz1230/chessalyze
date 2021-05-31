@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+        <link id="theme_sheet" rel="stylesheet" type="text/css" href="../../../../assets/themes/bootstrap-lumen-4.6.0.min.css" />
+        <link rel="stylesheet" type="text/css" href="../../../../node_modules/chessground/assets/chessground.base.css" />
+        <link rel="stylesheet" type="text/css" href="../../styles/cgboard.css" />
+        <link id="board_sheet" rel="stylesheet" type="text/css" href="../../../../assets/boards/brown.css" />
+        <link id="piece_sheet" rel="stylesheet" type="text/css" href="../../../../assets/piecesets/cburnett.css" />
+        <link rel="stylesheet" type="text/css" href="../../styles/index.css" />
+    </head>
+    <body>
+        <!--Toasts-->
+        <div id="toasts"></div>
+        <!--Main page-->
+        <div class="master">
+            <div id="clocks">
+                <div>
+                    <div class="clock"><span id="clock_top"></span></div>
+                    <div class="player">
+                        <span id="elo_top">-</span>
+                        <span id="player_top">Anonymous</span>
+                        <span id="title_top"></span>
+                    </div>
+                    <div id="actionbar">
+                        <button class="btn btn-light action adjudication" data-result="1-0">1-0</button>
+                        <button class="btn btn-light action adjudication" data-result="1/2-1/2">1/2-1/2</button>
+                        <button class="btn btn-light action adjudication" data-result="0-1">0-1</button>
+                    </div>
+                    <div class="player">
+                        <span id="elo_bottom">-</span>
+                        <span id="player_bottom">Anonymous</span>
+                        <span id="title_bottom"></span>
+                    </div>
+                    <div class="clock"><span id="clock_bottom"></span></div>
+                </div>
+            </div>
+            <div id="boardarea">
+                <div style="position: relative; height: 100%; top: 100%; pointer-events: none;">
+                    <div id="board"></div>
+                    <div id="promotion_popup" style="display: none;">
+                        <square data-role="queen" style="top: 0%;left: 0%;">
+                            <piece class="queen white"></piece>
+                        </square>
+                        <square data-role="rook" style="top: 12.5%;left: 0%;">
+                            <piece class="rook white"></piece>
+                        </square>
+                        <square data-role="bishop" style="top: 25%;left: 0%;">
+                            <piece class="bishop white"></piece>
+                        </square>
+                        <square data-role="knight" style="top: 37.5%;left: 0%;">
+                            <piece class="knight white"></piece>
+                        </square>
+                    </div>
+                </div>
+            </div>
+            <div id="tabs">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Games</a>
+                        <div class="dropdown-menu" id="gamelist">
+                            <div class="dropdown-divider" id="gamelist_divider"></div>
+                            <a class="dropdown-item" id="newgame" href="#" role="button">+ New Game</a>
+                        </div>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="#moves" data-toggle="tab" role="tab">Moves</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#tags" data-toggle="tab" role="tab">Tags</a>
+                    </li>
+                </ul>
+                <div class="tab-content overflow-auto">
+                    <div class="tab-pane fade show active" id="moves" role="tabpanel"></div>
+                    <div class="tab-pane fade" id="tags" role="tabpanel">
+                        <ul class="list-group list-group-flush" id="headers">
+                            <li class="list-group-item tag" data-tag="Event">
+                                <span>Event</span>
+                                <input class="form-control tag-value" type="text" value="?"/>
+                            </li>
+                            <li class="list-group-item tag" data-tag="Site">
+                                <span>Site</span>
+                                <input class="form-control tag-value" type="text" value="?"/>
+                            </li>
+                            <li class="list-group-item tag" data-tag="Date">
+                                <span>Date</span>
+                                <input class="form-control tag-value" type="date" value=""/>
+                            </li>
+                            <li class="list-group-item tag" data-tag="Round">
+                                <span>Round</span>
+                                <input class="form-control tag-value" type="text" value="?"/>
+                            </li>
+                            <li class="list-group-item tag" data-tag="White">
+                                <span>White</span>
+                                <input class="form-control tag-value" type="text" value="?"/>
+                            </li>
+                            <li class="list-group-item tag" data-tag="Black">
+                                <span>Black</span>
+                                <input class="form-control tag-value" type="text" value="?"/>
+                            </li>
+                            <li class="list-group-item tag" data-tag="Result">
+                                <span>Result</span>
+                                <input class="form-control tag-value" type="text" value="?"/>
+                            </li>
+                            <li class="list-group-item tag" data-tag="new">
+                                <input id="add_tag_name" class="form-control" type="text" placeholder="Name" value="" />
+                                <input id="add_tag_value" class="form-control tag-value" type="text" placeholder="Value" value="" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="annotation">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="#comments" data-toggle="tab" role="tab">Comments</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#nags" data-toggle="tab" role="tab">Annotation</a>
+                    </li>
+                </ul>
+                <div class="tab-content overflow-auto">
+                    <div class="tab-pane fade show active" id="comments" role="tabpanel">
+                        <textarea spellcheck="false" class="comment" rows="2" id="ncomment" placeholder="Write new comment here"></textarea>
+                        <div id="comment_list"></div>
+                    </div>
+                    <div class="tab-pane fade" id="nags" role="tabpanel">
+                        <div class="d-inline-block">
+                            <ul class="list-group nag-group">
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="1" data-nag-accept="1" data-nag-symbol="!">Good move</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="2" data-nag-accept="2" data-nag-symbol="?">Mistake</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="3" data-nag-accept="3" data-nag-symbol="!!">Brilliant move</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="4" data-nag-accept="4" data-nag-symbol="??">Blunder</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="5" data-nag-accept="5" data-nag-symbol="!?">Interesting move</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="6" data-nag-accept="6" data-nag-symbol="?!">Dubious move</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="7" data-nag-accept="7" data-nag-symbol="□">Only move</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="22" data-nag-accept="22,23" data-nag-symbol="⨀" data-nag-color-specific="true">Zugzwang</div></li>
+                            </ul>
+                        </div>
+                        <div class="d-inline-block">
+                            <ul class="list-group nag-group">
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="10" data-nag-accept="10" data-nag-symbol="=">Equal position</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="13" data-nag-accept="13" data-nag-symbol="∞">Unclear position</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="14" data-nag-accept="14" data-nag-symbol="⩲">White is slightly better</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="15" data-nag-accept="15" data-nag-symbol="⩱">Black is slightly better</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="16" data-nag-accept="16" data-nag-symbol="±">White is better</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="17" data-nag-accept="17" data-nag-symbol="∓">Black is better</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="18" data-nag-accept="18,20" data-nag-symbol="+−">White is winning</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="19" data-nag-accept="19,21" data-nag-symbol="-+">Black is winning</div></li>
+                            </ul>                        
+                        </div>
+                        <div class="d-inline-block">
+                            <ul class="list-group nag-group">
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="146" data-nag-accept="146" data-nag-symbol="N">Novelty</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="32" data-nag-accept="30,31,32,33,34,35" data-nag-symbol="↑↑" data-nag-color-specific="true">Development</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="36" data-nag-accept="36,37,38,39" data-nag-symbol="↑" data-nag-color-specific="true">Initiative</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="40" data-nag-accept="40,41" data-nag-symbol="→" data-nag-color-specific="true">Attack</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="132" data-nag-accept="130,132,132,133,134,135" data-nag-symbol="⇆" data-nag-color-specific="true">Counterplay</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="138" data-nag-accept="136,137,138,139" data-nag-symbol="⊕" data-nag-color-specific="true">Time trouble</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="44" data-nag-accept="42,43,44,45,46,47" data-nag-symbol="=∞" data-nag-color-specific="true">With compensation</div></li>
+                                <li class="list-group-item nag-item"><div class="nag-btn" data-nag="140" data-nag-accept="140" data-nag-symbol="∆">With the idea</div></li>
+                            </ul>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="engine">
+                <ul class="nav nav-tabs" id="engine_tabs_headers">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link engine-link active" href="#lichess_engine" data-toggle="tab" role="tab">
+                            <span class="eval">-</span>
+                            <span class="bestmove">-</span>
+                            <span class="enginename">lichess.org</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Engine</a>
+                        <div class="dropdown-menu" id="enginelist">
+                            <a class="dropdown-item" id="new_uci_engine" href="#" role="button">+ New engine template</a>
+                            <div class="dropdown-divider" id="enginelist_divider" style="display: none;"></div>
+                        </div>
+                    </li>
+                </ul>
+                <div id="engine_tabs" class="tab-content flex-grow-1 overflow-auto">
+                    <div class="tab-pane fade active show" id="lichess_engine" role="tabpanel">
+                        <div class="engine lichess-engine">
+                            <div class="analysisheader">
+                                <div class="custom-control custom-switch">
+                                    &nbsp;&nbsp;
+                                    <input id="cloudanal_toggle" class="custom-control-input" type="checkbox" name="cloudanal" value="true">
+                                    <label for="cloudanal_toggle" class="custom-control-label">Cloud Analysis</label>
+                                </div>
+                            </div>
+                            <div class="analstats">
+                                <ul class="list-group list-group-horizontal">
+                                    <li class="list-group-item engine-stat">
+                                        <span data-stat="score" class="engine-stat-big">-</span>
+                                        <span class="engine-stat-name">Score</span>
+                                    </li>
+                                    <li class="list-group-item engine-stat">
+                                        <span data-stat="depth" class="engine-stat-big">-</span>
+                                        <span class="engine-stat-name">Depth</span>
+                                    </li>
+                                    <li class="list-group-item engine-stat">
+                                        <span data-stat="knodes" class="engine-stat-small">-</span>
+                                        <span class="engine-stat-name">kNodes</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="analpvs">
+                                <div data-li-multipv="1" class="engine-pv border-primary">+-.-- | -</div>
+                                <div data-li-multipv="2" class="engine-pv">+-.-- | -</div>
+                                <div data-li-multipv="3" class="engine-pv">+-.-- | -</div>
+                            </div>
+                            <div class="explorerheader">
+                                <div class="custom-control custom-switch">
+                                    &nbsp;&nbsp;
+                                    <input id="explorer_toggle" class="custom-control-input" type="checkbox" name="explorer" value="true">
+                                    <label for="explorer_toggle" class="custom-control-label">Explorer</label>
+                                </div>
+                            </div>
+                            <div class="explorer">
+                                <div class="explorer-loading" style="display: none;">
+                                    <div class="spinner-border text-secondary" role="status"></div>
+                                </div>
+                                <div class="no-explorer" style="display: none;">
+                                    <p>Unavailable for this position.</p>
+                                </div>
+                                <div class="tb-explorer" style="display: none;">
+                                    <ul class="list-group list-group-flush" id="li_tb_moves"></ul>
+                                </div>
+                                <div class="op-explorer" style="display: none;">
+                                    <div class="op-opening"></div>
+                                    <div class="text-center">White Win / Draw / Black Win</div>
+                                    <div class="wdb-bar border rounded border-dark" id="li_op_wdb" style="grid-template-columns: 33fr 33fr 33fr;">
+                                        <span class="wdb-w">-%</span>
+                                        <span class="wdb-d">-%</span>
+                                        <span class="wdb-b">-%</span>
+                                    </div>
+                                    <ul class="list-group" id="li_op_games"></ul>
+                                    <ul class="list-group list-group-flush" id="li_op_moves"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modals-->
+        <button style="display: none;" id="trigger_configure_uci_engine" data-toggle="modal" data-target="#configure_uci_engine"></button>
+        <div class="modal fade" id="configure_uci_engine" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="configure_uci_engine_title"></h5>
+                        <button id="dismiss_configure_uci_engine" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <strong id="configure_uci_template_title">Template data:</strong>
+                        <form id="configure_uci_template">
+                            <div class="form-group">
+                                <label>Executable</label>
+                                <div class="d-flex flex-row">
+                                    <span class="flex-grow-1" id="configure_uci_template_exe_path"></span>
+                                    <!--button class="btn btn-secondary" type="button" id="configure_uci_template_set_exe_path" disabled>...</button-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="configure_uci_template_name">Name</label>
+                                <input id="configure_uci_template_name" class="form-control" type="text" name="templateName" disabled>
+                            </div>
+                        </form>
+                        <strong>Search options:</strong>
+                        <form id="configure_uci_engine_search_options" onsubmit="return false;">
+                            <div class="d-flex flex-row">
+                                <div class="custom-control custom-radio w-50">
+                                    <input id="cfg_uci_search_infinite" class="custom-control-input" type="radio" name="cfg_uci_search_type" value="infinite" checked>
+                                    <label for="cfg_uci_search_infinite" class="custom-control-label">Infinite</label>
+                                </div>
+                                <div class="custom-control custom-radio w-50">
+                                    <input id="cfg_uci_search_depth" class="custom-control-input" type="radio" name="cfg_uci_search_type" value="depth">
+                                    <label for="cfg_uci_search_depth" class="custom-control-label">Depth</label>
+                                    <input id="cfg_uci_search_depth_n" class="form-control" type="number" placeholder="in plys" name="search_depth" value="">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div class="custom-control custom-radio w-50">
+                                    <input id="cfg_uci_search_nodes" class="custom-control-input" type="radio" name="cfg_uci_search_type" value="nodes">
+                                    <label for="cfg_uci_search_nodes" class="custom-control-label">Nodes</label>
+                                    <input id="cfg_uci_search_nodes_n" class="form-control" type="number" placeholder="in knodes" name="search_nodes" value="">
+                                </div>
+                                <div class="custom-control custom-radio w-50">
+                                    <input id="cfg_uci_search_movetime" class="custom-control-input" type="radio" name="cfg_uci_search_type" value="movetime">
+                                    <label for="cfg_uci_search_movetime" class="custom-control-label">Time</label>
+                                    <input id="cfg_uci_search_movetime_n" class="form-control" type="number" placeholder="in seconds" name="search_depth" value="">
+                                </div>
+                            </div>
+                        </form>
+                        <br/>
+                        <strong>Other options:</strong>
+                        <form id="configure_uci_engine_uci_options" onsubmit="return false;"></form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" id="configure_uci_engine_defaults">Reset to defaults</button>
+                        <button type="button" class="btn btn-danger" id="configure_uci_engine_cancel" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" id="configure_uci_engine_apply">Apply & Save</button>
+                        <button type="button" class="btn btn-success" id="configure_uci_engine_save">Save</button>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <button style="display: none;" id="trigger_add_engine_template" data-toggle="modal" data-target="#add_engine_template"></button>
+        <div class="modal fade" id="add_engine_template" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New UCI engine</h5>
+                        <button id="dismiss_add_engine_template" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-row">
+                            <div>Executable:&nbsp;</div>
+                            <div class="text-center flex-grow-1" id="add_engine_template_exe_path"></div>
+                        </div>
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <label for="add_engine_template_display_name">Name</label>
+                                <input id="add_engine_template_display_name" class="form-control" type="text" name="displayName">
+                            </div>
+                            <hr/>
+                            <div class="custom-control custom-checkbox">
+                                <input id="add_engine_template_registration" class="custom-control-input" type="checkbox" name="registration" value="true">
+                                <label title="Only enable for engines that use registration" for="add_engine_template_registration" class="custom-control-label">Enable registration</label>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div class="form-group flex-grow-1">
+                                    <label for="add_engine_template_registration_name">Registration name</label>
+                                    <input disabled id="add_engine_template_registration_name" class="form-control" type="text" name="registrationName">
+                                </div>
+                                <div class="form-group flex-grow-1">
+                                    <label for="add_engine_template_registration_code">Registration code</label>
+                                    <input disabled id="add_engine_template_registration_code" class="form-control" type="text" name="registrationCode">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="add_engine_template_confirm">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button style="display: none;" id="trigger_lichess_import" data-toggle="modal" data-target="#lichess_import"></button>
+        <div class="modal fade" id="lichess_import" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Import from lichess.org</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs nav-pills nav-fill">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" href="#li_import_by_study" data-toggle="tab" role="tab">From study</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="#li_import_by_id" data-toggle="tab" role="tab">From ID</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="#li_import_by_user" data-toggle="tab" role="tab">From user</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="#li_import_by_tournament" data-toggle="tab" role="tab">From tournament</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" role="tabpanel" id="li_import_by_study">
+                                <p></p>
+                                <div class="alert alert-info" role="alert">
+                                    Note that only public studies can be imported.
+                                </div>
+                                <form id="li_imp_study" onsubmit="return false;">
+                                    <div class="custom-control custom-radio">
+                                        <input id="li_study_by_user" class="custom-control-input" type="radio" name="requestType" value="byUser" checked>
+                                        <label for="li_study_by_user" class="custom-control-label">Import all studies of user:</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="li_study_user">Username:</label>
+                                        <input id="li_study_user" class="form-control" type="text" name="liStudyUser">
+                                    </div>
+                                    <hr/>
+                                    <div class="custom-control custom-radio">
+                                        <input id="li_study_by_id" class="custom-control-input" type="radio" name="requestType" value="byId">
+                                        <label for="li_study_by_id" class="custom-control-label">Import study with id:</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="study_id">Study ID</label>
+                                        <input id="study_id" class="form-control" type="text" name="studyId">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="li_study_chapter">Import only one chapter:</label>
+                                        <input id="li_study_chapter" class="form-control" type="text" name="chapterId" placeholder="Chapter ID (leave empty to import all chapters)">
+                                    </div>
+                                    <hr/>
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="li_study_clocks" class="custom-control-input" type="checkbox" name="clocks" value="true" checked>
+                                        <label for="li_study_clocks" class="custom-control-label">Import clock times</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="li_study_comments" class="custom-control-input" type="checkbox" name="comments" value="true" checked>
+                                        <label for="li_study_comments" class="custom-control-label">Import comments</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="li_study_variations" class="custom-control-input" type="checkbox" name="variations" value="true" checked>
+                                        <label for="li_study_variations" class="custom-control-label">Import variations</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" role="tabpanel" id="li_import_by_id">
+                                <p></p>
+                                <form id="li_imp_ids" onsubmit="return false;">
+                                    <div class="form-group">
+                                        <label for="li_import_ids">Comma-separated ids:</label>
+                                        <input id="li_import_ids" class="form-control" type="text" name="ids" />
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="li_import_ids_clocks" class="custom-control-input" type="checkbox" name="clocks" value="true" checked>
+                                        <label for="li_import_ids_clocks" class="custom-control-label">Import clock times</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="li_import_ids_evals" class="custom-control-input" type="checkbox" name="evals" value="true" checked>
+                                        <label for="li_import_ids_evals" class="custom-control-label">Import evaluations</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="li_import_ids_openings" class="custom-control-input" type="checkbox" name="opening" value="true" checked>
+                                        <label for="li_import_ids_openings" class="custom-control-label">Import openings</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" role="tabpanel" id="li_import_by_user">
+                                <p></p>
+                                <form id="li_imp_user" onsubmit="return false;">
+                                    <div class="form-group">
+                                        <label for="li_import_user">Username:</label>
+                                        <input id="li_import_user" class="form-control" type="text" name="username">
+                                    </div>
+                                    <div class="alert alert-warning" role="alert">
+                                        Importing games of a user may take a while. Filtering games preemptively with the parameters below can help with that.
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div class="form-group flex-grow-1">
+                                            <label for="li_import_user_since">Since</label>
+                                            <input id="li_import_user_since" class="form-control" type="date" name="since">
+                                        </div>
+                                        <div class="form-group flex-grow-1">
+                                            <label for="li_import_user_until">Until</label>
+                                            <input id="li_import_user_until" class="form-control" type="date" name="until">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="li_import_opponent">Opponent:</label>
+                                        <input placeholder="Leave empty to include all opponents" id="li_import_opponent" class="form-control" type="text" name="vs">
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-grow-1 custom-control custom-checkbox text-left">
+                                            <input id="li_import_rated" class="custom-control-input" type="checkbox" name="rated" value="true" checked>
+                                            <label for="li_import_rated" class="custom-control-label">Rated games</label>
+                                        </div>
+                                        <div class="flex-grow-1 custom-control custom-checkbox text-right">
+                                            <input id="li_import_casual" class="custom-control-input" type="checkbox" name="casual" value="true" checked>
+                                            <label for="li_import_casual" class="custom-control-label">Casual games</label>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-grow-1 custom-control custom-checkbox text-left">
+                                            <input id="li_import_analysed" class="custom-control-input" type="checkbox" name="analysed" value="true" checked>
+                                            <label for="li_import_analysed" class="custom-control-label">Analysed games</label>
+                                        </div>
+                                        <div class="flex-grow-1 custom-control custom-checkbox text-right">
+                                            <input id="li_import_nonanalysed" class="custom-control-input" type="checkbox" name="nonanalysed" value="true" checked>
+                                            <label for="li_import_nonanalysed" class="custom-control-label">Non-analysed games</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="li_import_perfType">Perf. type (select none to select all)</label>
+                                        <select id="li_import_perfType" class="custom-select" name="perfType" multiple>
+                                            <option value="ultraBullet">Ultra Bullet</option>
+                                            <option value="bullet">Bullet</option>
+                                            <option value="blitz">Blitz</option>
+                                            <option value="rapid">Rapid</option>
+                                            <option value="classical">Classical</option>
+                                            <option value="crazyhouse">Crazyhouse</option>
+                                            <option value="chess960">Chess960</option>
+                                            <option value="atomic">Atomic</option>
+                                            <option value="horder">Horder</option>
+                                            <option value="kingOfTheHill">King of the Hill</option>
+                                            <option value="antichess">Antichess</option>
+                                            <option value="threeCheck">Three-check</option>
+                                            <option value="racingKings">Racing Kings</option>
+                                        </select>
+                                    </div>
+                                    <div class="from-group text-center">
+                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-secondary">
+                                                <input type="radio" name="color" value="white"> White
+                                            </label>
+                                            <label class="btn btn-secondary">
+                                                <input type="radio" name="color" value="null" checked> Both colors
+                                            </label>
+                                            <label class="btn btn-secondary">
+                                                <input type="radio" name="color" value="black"> Black
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="li_import_clocks" class="custom-control-input" type="checkbox" name="clocks" value="true" checked>
+                                            <label for="li_import_clocks" class="custom-control-label">Import clock times</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="li_import_evals" class="custom-control-input" type="checkbox" name="evals" value="true" checked>
+                                            <label for="li_import_evals" class="custom-control-label">Import evaluations</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="li_import_opening" class="custom-control-input" type="checkbox" name="opening" value="true" checked>
+                                            <label for="li_import_opening" class="custom-control-label">Import openings</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" role="tabpanel" id="li_import_by_tournament">
+                                <p></p>
+                                <form id="li_imp_tournament" onsubmit="return false;">
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary">
+                                            <input type="radio" name="tSystem" value="arena" checked> Arena
+                                        </label>
+                                        <label class="btn btn-secondary">
+                                            <input type="radio" name="tSystem" value="swiss"> Swiss
+                                        </label>
+                                    </div>
+                                    <hr/>
+                                    <div class="form-group">
+                                        <label for="li_tournament_id">Tournament ID:</label>
+                                        <input id="li_tournament_id" class="form-control" type="text" name="id">
+                                    </div>
+                                    <hr/>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="li_tournament_clocks" class="custom-control-input" type="checkbox" name="clocks" value="true" checked>
+                                            <label for="li_tournament_clocks" class="custom-control-label">Import clock times</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="li_tournament_evals" class="custom-control-input" type="checkbox" name="evals" value="true" checked>
+                                            <label for="li_tournament_evals" class="custom-control-label">Import evaluations</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="li_tournament_opening" class="custom-control-input" type="checkbox" name="opening" value="true" checked>
+                                            <label for="li_tournament_opening" class="custom-control-label">Import openings</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="dismiss_lichess_import" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="lichess_import_confirm">Import</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button style="display: none;" id="trigger_condition_export" data-toggle="modal" data-target="#condition_export"></button>
+        <div class="modal fade" id="condition_export" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Export with filters:</h5>
+                        <button id="dismiss_condition_export" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush" id="export_conditions">
+                            <li class="list-group-item export-condition-add">
+                                <button id="add_export_tag_condition" class="btn btn-success" type="button">Add tag filter</button>
+                                <button id="add_export_movetext_condition" class="btn btn-success" type="button">Add movetext filter</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="condition_export_confirm">Export...</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button style="display: none;" id="trigger_progress" data-toggle="modal" data-target="#progress"></button>
+        <div class="modal" data-backdrop="static" data-keyboard="false" id="progress" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="progress_title"></h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="progress">
+                            <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" id="progress_bar"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" style="display: none;" id="dismiss_progress" data-dismiss="modal"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Scripts-->
+        <script src="../../scripts/define-exports.js" type="text/javascript"></script>
+        <script src="../../scripts/bootstrap-4.6.0.min.js" type="text/javascript"></script>
+        <script src="../../scripts/pgn_editor/editor.js" type="text/javascript"></script>
+    </body>
+</html>
