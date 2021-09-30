@@ -2,154 +2,196 @@ import d3 = require("d3")
 import { Game, Move, RAV } from "../../../common/pgn"
 import { nagTable } from "../../scripts/pgn_editor/annotation"
 import { selection } from "../../scripts/pgn_editor/selection"
-import { state } from "../../scripts/pgn_editor/state"
-import { indexOfVariation, ravLevel, variationOf } from "../../scripts/pgn_editor/utils"
+import { indexOf, indexOfVariation, variationAt, variationOf } from "../../scripts/pgn_editor/utils"
 
-export const movelist = {
-    list: document.getElementById('moves'),
-    nagSymbol(nag: string): string {
-        const nagName = nagTable[nag]
-        return nagName === undefined ? nag : nagName
-    },
-    getMovetext(move: Move): string {
-        return (move.move_number !== undefined ? (move.move_number + '.') : '') + 
-        ((move.move_number !== undefined) ? (move.isBlackMove ? '..' : ' ') : '') + 
-        move.move +
-        (move.nags !== undefined ? move.nags.map(nag => movelist.nagSymbol(nag)).join('') : '')
-    },
-    createMove(move: Move): HTMLSpanElement {
-        const m = move
-        return d3.create('span').attr('class', 'move')
-        .text(movelist.getMovetext(move)).on('click', ev => {
-            selection.selectMove(m)
-        })
+export class Movelist {
+
+    static getNagSymbol(nag: string) {
+        return nagTable[nag] === undefined ? nag : nagTable[nag]
+    }
+    //TODO add options for different piece names
+    /**
+     * @param {Move} move
+     * @returns {string} The text to display in the movelist for a given move
+     */
+    static getMovetext(move: Move): string {
+        return (move.move_number !== undefined ? (move.move_number + '.') : '') + //put dot after move numbers
+        (move.move_number !== undefined ? (move.isBlackMove ? '..' : ' ') : '') + //adds two extra dots after black move numbers; a space after white move numbers
+        (move.move) + //the san movetext
+        (move.nags !== undefined ? move.nags.map(nag => Movelist.getNagSymbol(nag)).join('') : '') //add nags
+    }
+    /**
+     * Creates a new node that displays a move in a move list.
+     * @param {Move} move Which move to display
+     * @returns {HTMLElement} The generated node
+     */
+    private static createMoveElement(move: Move): HTMLElement {
+        const m = move //get const reference for event callback
+        return d3.create('span')
+        .attr('class', 'move')
+        .text(Movelist.getMovetext(move))
+        .on('click', ev => selection.selectMove(m))
         .node()
-    },
+    }
+    /**
+     * Creates a new node to hold move nodes of a variation.
+     * @param isFirst Whether the element is the first for it's rav
+     * @param level The level of the rav
+     */
+    private static createVariationElement(isFirst: boolean, level: number): HTMLElement {
+        const div = d3.create('div')
+        .attr('class', 'variation')
+        .classed('main', level === 0)
+        .classed('rav', level > 0)
+        .style('margin-left', (level * 15) + 'px')
+        .attr('data-rav-level', level === 0 ? null : level+'')
+        if (isFirst && level > 0) div.text('(')
+        return div.node()
+    }
+
+    private wrapper: HTMLElement
+    private resultNode: HTMLSpanElement
+    private ravs: Map<string, {start: number, element: HTMLElement}[]>
+
+    constructor(element?: HTMLElement, options?: null) {
+        if (element === undefined || element === null) element = d3.create('div').node()
+        this.wrapper = element
+        this.ravs = new Map()
+    }
+
     clear() {
-        while (movelist.list.children.length > 0) {
-            movelist.list.children[0].remove()
+        while (this.wrapper.children.length > 0) {
+            this.wrapper.children[0].remove()
         }
-    },
+        this.ravs.clear()
+    }
+    /**
+     * Removes all elements of the rav and it's children ravs
+     * @param ravIndex The index of the rav, each number separated with an underscore
+     */
+    private clearVariation(ravIndex: string) {
+        const keys = this.ravs.keys()
+        for (const index of keys) {
+            if (index.startsWith(ravIndex)) {
+                this.ravs.get(index).forEach(el => el.element.remove())
+                this.ravs.delete(index)
+            }
+        }
+    }
+    /**
+     * Finds the element before which to insert elements of a rav
+     * @param index Index of the variation after which to search the element
+     * @returns The first variation element after the given variation
+     */
+    private findVariationElementAfter(index: number[]) {
+        if (index.length < 2) return null
+        //check for rav after the given one
+        index[index.length-1] += 1
+        let ravIndex = index.join('_')
+        if (this.ravs.has(ravIndex)) return this.ravs.get(ravIndex)[0].element
+        //check for the parent rav
+        index.pop()
+        const moveIndex = index.pop()
+        ravIndex = index.join('_')
+        const element = this.ravs.get(ravIndex)?.filter(ravSegment => ravSegment.start > moveIndex)[0]
+        if (element !== undefined) return element.element
+        return this.findVariationElementAfter(index)
+    }
+    /**
+     * Changes which game is displayed in the move list.
+     * @param game The game to show
+     */
     show(game: Game) {
-        movelist.clear()
-        movelist.newVariation(game, null, 0, 0)
-        const r = document.createElement('span')
-        r.className = 'result'
-        r.innerText = game.result
-        let varDiv: HTMLDivElement
-        if (movelist.list.lastElementChild?.classList.contains('main')) {
-            varDiv = <HTMLDivElement>movelist.list.lastElementChild
-        } else {
-            varDiv = document.createElement('div')
-            varDiv.className = 'variation main'
-            varDiv.setAttribute('data-variation', '[]')
-            movelist.list.appendChild(varDiv)
-        }
-        varDiv.appendChild(r)
-    },
-    newMove(move: Move) {
+        //remove all elements
+        this.clear()
+        //set result
+        this.resultNode = d3.create('span')
+        .attr('class', 'result')
+        .text(game.result).node()
+        //show moves
+        this.updateVariation(game, null, true, null)
+    }
+    /**
+     * Updates the displayed state of the move (and it's parent variation) in the movelist. 
+     * @param move The move to update
+     */
+    updateMove(move: Move) {
         const variation = variationOf(move)
-        const varDiv = movelist.findLastVariationDiv(variation)
-        const prevLastMove = variation.moves[variation.moves.length-2]
-        if (variation !== state.selected.game && prevLastMove !== undefined && prevLastMove.ravs !== undefined && prevLastMove.ravs.length > 0) {
-            if (varDiv.lastChild.textContent === ')') varDiv.lastChild.remove()
-            const prevMoveRavDiv = movelist.findLastVariationDiv(prevLastMove.ravs[prevLastMove.ravs.length-1])
-            movelist.newVariation(variation, prevMoveRavDiv, variation.moves.indexOf(move))
-        } else {
-            varDiv.insertBefore(movelist.createMove(move), varDiv.lastChild)
-        }
-    },
-    insertLastVariationOf(move: Move) {
-        if (move.ravs.length === 1) {
-            const variation = variationOf(move)
-            const varDiv = movelist.findVariationDiv(move)
-            const lastVarEl = movelist.findLastVariationDiv(variation)
-            let el1 = varDiv.el
-            while (el1 !== lastVarEl) {
-                if (el1 === null || el1 === undefined) break
-                let rmEl = el1
-                el1 = <HTMLDivElement>el1.nextElementSibling
-                if (rmEl !== varDiv.el) rmEl.remove()
-            }
-            const nVarDiv = movelist.newVariation(move.ravs[move.ravs.length-1], varDiv.el)
-            const splitVarDiv = movelist.newVariation(variation, nVarDiv, variation.moves.indexOf(move)+1, -1, variation === state.selected.game)
-            if (variation === state.selected.game) splitVarDiv.appendChild(lastVarEl.lastChild)
-            while (varDiv.index < varDiv.el.children.length-1) {
-                varDiv.el.children[varDiv.index+1].remove()
-            }
-            if (varDiv.el !== lastVarEl) lastVarEl.remove()
-        } else {
-            const varDiv = movelist.findLastVariationDiv(move.ravs[move.ravs.length-2])
-            movelist.newVariation(move.ravs[move.ravs.length-1], varDiv)
-        }
-    },
-    newVariation(rav: RAV, after: HTMLDivElement, offset: number = 0, level: number = -1, createEmpty: boolean = false) {
-        if (!createEmpty && rav.moves.length-offset <= 0) return
-        if (level < 0) level = ravLevel(rav, state.selected.game)
-        const index = JSON.stringify(indexOfVariation(rav))
-        const variationDiv = document.createElement('div')
-        variationDiv.setAttribute('data-variation', index)
-        variationDiv.className = 'variation'
-        variationDiv.classList.add(level === 0 ? 'main' : 'rav')
-        variationDiv.style.marginLeft = (level * 15) + 'px'
-        if (level > 0) {
-            variationDiv.setAttribute('data-rav-level', level+'')
-            variationDiv.append('(')
-        }
-        movelist.list.insertBefore(variationDiv, after?.nextSibling)
-        let i = offset
-        let last = variationDiv
-        for (; i < rav.moves.length; i++) {
+        this.updateVariation(variation)
+    }
+    /**
+     * Updates the displayed state of the rav (and it's children) in the movelist. 
+     * @param {RAV} rav Which rav to update. Either this or *index* has to be specified (non-null).
+     * @param {number[]} index Index of the rav. Either this or *rav* has to be specified (non-null). 
+     * The reference you pass in will be modified, but will have it's original state back when the function finishes.
+     * @param {boolean} isCleared  Whether the movelist already has no elements of the given RAV. Keep it false to avoid headaches.
+     * @param {HTMLElement} insertionPoint The variation element before which the elements of this variation should be inserted.
+     */
+    updateVariation(rav: RAV, index: number[] = null, isCleared: boolean = false, insertionPoint: HTMLElement = null) {
+        //process arguments
+        if (rav === undefined) rav = null
+        if (index === undefined) index = null
+        if (rav === null && index === null) throw new Error("Invalid Argument: Either rav or index have to be specified")
+        if (rav === null) rav = variationAt(index)
+        else if (index === null) index = indexOfVariation(rav)
+        const ravIndex = index.join('_')
+        //clear old rav elements
+        if (!isCleared) this.clearVariation(ravIndex)
+        //find insertion point
+        if (insertionPoint === null) insertionPoint = this.findVariationElementAfter(index.slice(0))
+        //create rav elements
+        const level = Math.floor(index.length / 2)
+        let currentElement = Movelist.createVariationElement(true, level)
+        const elRef = currentElement
+        this.ravs.set(ravIndex, [{start: 0, element: elRef}])
+        let elementPending = true
+        for (let i = 0; i < rav.moves.length; i++) {
             const move = rav.moves[i]
-            variationDiv.appendChild(movelist.createMove(move))
+            currentElement.appendChild(Movelist.createMoveElement(move))
             if (move.ravs !== undefined && move.ravs.length > 0) {
+                if (insertionPoint !== null) console.log(insertionPoint)
+                this.wrapper.insertBefore(currentElement, insertionPoint)
+                elementPending = false
+                index.push(i)
+                //create all rav elements of children
                 for (let j = 0; j < move.ravs.length; j++) {
-                    const rav1 = move.ravs[j]
-                    last = movelist.newVariation(rav1, last, 0, level+1)
+                    index.push(j)
+                    this.updateVariation(move.ravs[j], index, true, insertionPoint)
+                    index.pop()
                 }
-                break
-            }
-        }
-        if (i === rav.moves.length) {
-            if (level > 0) variationDiv.append(')')
-        } else {
-            last = movelist.newVariation(rav, last, i+1, level)
-        }
-        return last
-    },
-    findVariationDiv(move: Move): {el: HTMLDivElement, index: number} {
-        const el = movelist.findMoveElement(move)
-        return {
-            el: <HTMLDivElement>el.parentElement,
-            index: [...el.parentElement.children].indexOf(el)
-        }
-    },
-    findLastVariationDiv(rav: RAV): HTMLDivElement {
-        const index = JSON.stringify(indexOfVariation(rav))
-        let elem: HTMLDivElement = null
-        for (let i = 0; i < movelist.list.children.length; i++) {
-            const child = movelist.list.children[i]
-            if (child.getAttribute('data-variation') === index) {
-                elem = <HTMLDivElement>child
-            }
-        }
-        return elem
-    },
-    findMoveElement(move: Move): HTMLSpanElement {
-        if (move === null) return null
-        const variation = variationOf(move)
-        const index = JSON.stringify(indexOfVariation(variation))
-        const mIndex = variation.moves.indexOf(move)
-        let vmIndex = 0
-        for (let i = 0; i < movelist.list.children.length; i++) {
-            const child = movelist.list.children[i]
-            if (child.getAttribute('data-variation') === index) {
-                vmIndex += child.childElementCount
-                if (mIndex < vmIndex) {
-                    return <HTMLSpanElement>(child.children[mIndex-(vmIndex-child.childElementCount)])
+                index.pop()
+                //create next rav element (if there are moves for it)
+                if (i < rav.moves.length-1) {
+                    currentElement = Movelist.createVariationElement(false, level)
+                    const el = currentElement
+                    this.ravs.get(ravIndex).push({start: i+1, element: el})
+                    elementPending = true
                 }
             }
         }
-        return null
+        if (insertionPoint !== null) console.log(insertionPoint)
+        if (elementPending) this.wrapper.insertBefore(currentElement, insertionPoint)
+        //add closing bracket at the end of non-main variations
+        if (level > 0) currentElement.append(')')
+        //add result display at the end of main variation
+        else currentElement.appendChild(this.resultNode)
+    }
+    /**
+     * Retrieve the element that displays the given move
+     * @param move The move corresponding to the wanted element
+     */
+    getMoveElement(move: Move): HTMLElement {
+        let idx = indexOf(move)
+        const offset = idx.pop()
+        if (offset < 0) return null
+        const segments = this.ravs.get(idx.join('_'))
+        if (!segments) return null
+        let nextSegmentIndex = segments.findIndex(seg => seg.start > offset)
+        let segmentIndex = nextSegmentIndex-1
+        const segment = segments[segmentIndex >= 0 ? segmentIndex : segments.length-1]
+        if (!segment) return null
+        return <HTMLElement>segment.element.children[offset-segment.start]
     }
 }
+
+export const movelist = new Movelist(document.getElementById('moves'))
