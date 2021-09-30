@@ -45,11 +45,20 @@ export const indexOf = (move: Move): number[] => {
     return indexInVariation(state.selected.game, move)
 }
 
-export const indexOfVariation = (variation: RAV): number[] => {
-    if (variation.moves.length === 0) return null
-    let idx = indexOf(variation.moves[0])
-    idx.pop()
-    return idx
+export const indexOfVariation = (variation: RAV, parent: RAV = null): number[] => {
+    parent = parent ? parent : state.selected.game
+    if (variation === parent) return []
+    for (let i = 0; i < parent.moves.length; i++) {
+        const move = parent.moves[i]
+        if (move.ravs === undefined) continue
+        for (let j = 0; j < move.ravs.length; j++) {
+            const rav = move.ravs[j]
+            if (variation === rav) return [i, j]
+            const idx = indexOfVariation(variation, rav)
+            if (idx !== null) return [i, j].concat(idx)
+        }
+    }
+    return null
 }
 
 export const moveAt = (index: number[]): Move => {
@@ -60,6 +69,16 @@ export const moveAt = (index: number[]): Move => {
         move = variation.moves[index[i+1]]
     }
     return move === undefined ? null : move
+}
+export const variationAt = (index: number[]): RAV => {
+    if (state.selected.game === null) return null
+    let move: Move = null
+    let rav: RAV = null
+    for (let i = -1; i < index.length; i += 2) {
+        rav = i < 0 ? state.selected.game : move.ravs[index[i]]
+        move = rav.moves[index[i+1]]
+    }
+    return rav
 }
 
 export const variationOf = (move: Move): RAV => {

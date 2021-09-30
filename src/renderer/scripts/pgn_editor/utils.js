@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.selectedVariation = exports.variationOf = exports.moveAt = exports.indexOfVariation = exports.indexOf = exports.indexInVariation = exports.ravLevel = exports.fenOf = void 0;
+exports.selectedVariation = exports.variationOf = exports.variationAt = exports.moveAt = exports.indexOfVariation = exports.indexOf = exports.indexInVariation = exports.ravLevel = exports.fenOf = void 0;
 const fen_1 = require("chessops/fen");
 const state_1 = require("../../scripts/pgn_editor/state");
 exports.fenOf = (game) => {
@@ -46,12 +46,24 @@ exports.indexOf = (move) => {
         return [-1];
     return exports.indexInVariation(state_1.state.selected.game, move);
 };
-exports.indexOfVariation = (variation) => {
-    if (variation.moves.length === 0)
-        return null;
-    let idx = exports.indexOf(variation.moves[0]);
-    idx.pop();
-    return idx;
+exports.indexOfVariation = (variation, parent = null) => {
+    parent = parent ? parent : state_1.state.selected.game;
+    if (variation === parent)
+        return [];
+    for (let i = 0; i < parent.moves.length; i++) {
+        const move = parent.moves[i];
+        if (move.ravs === undefined)
+            continue;
+        for (let j = 0; j < move.ravs.length; j++) {
+            const rav = move.ravs[j];
+            if (variation === rav)
+                return [i, j];
+            const idx = exports.indexOfVariation(variation, rav);
+            if (idx !== null)
+                return [i, j].concat(idx);
+        }
+    }
+    return null;
 };
 exports.moveAt = (index) => {
     if (state_1.state.selected.game === null)
@@ -62,6 +74,17 @@ exports.moveAt = (index) => {
         move = variation.moves[index[i + 1]];
     }
     return move === undefined ? null : move;
+};
+exports.variationAt = (index) => {
+    if (state_1.state.selected.game === null)
+        return null;
+    let move = null;
+    let rav = null;
+    for (let i = -1; i < index.length; i += 2) {
+        rav = i < 0 ? state_1.state.selected.game : move.ravs[index[i]];
+        move = rav.moves[index[i + 1]];
+    }
+    return rav;
 };
 exports.variationOf = (move) => {
     const index = exports.indexOf(move);
