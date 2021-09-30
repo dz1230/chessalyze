@@ -50,7 +50,7 @@ exports.appendMove = (move) => {
         const next2 = selectedVariation.moves[selectedVariation.moves.indexOf(state_1.state.selected.next) + 1];
         if (next2 !== undefined && next2.isBlackMove)
             next2.move_number = state_1.state.selected.next.move_number;
-        movelist_1.movelist.insertLastVariationOf(state_1.state.selected.next);
+        movelist_1.movelist.updateMove(state_1.state.selected.next);
         selection_1.selection.selectMove(move);
         return;
     }
@@ -70,7 +70,7 @@ exports.appendMove = (move) => {
             move.move_number = variation.moves[variation.moves.indexOf(state_1.state.selected.move) - 1].move_number + 1;
         }
         variation.moves.push(move);
-        movelist_1.movelist.newMove(move);
+        movelist_1.movelist.updateMove(move);
         selection_1.selection.selectMove(move);
         if (variation === state_1.state.selected.game) {
             if (tags_1.tags.has('PlyCount'))
@@ -91,7 +91,7 @@ exports.appendMove = (move) => {
     }
     else {
         state_1.state.selected.game.moves.push(move);
-        movelist_1.movelist.newMove(move);
+        movelist_1.movelist.updateMove(move);
         selection_1.selection.selectMove(move);
     }
     if (tags_1.tags.has('PlyCount'))

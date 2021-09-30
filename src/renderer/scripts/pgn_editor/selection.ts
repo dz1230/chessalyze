@@ -111,8 +111,8 @@ export const selection = {
         comments.show(state.selected.move)
         nags.show(state.selected.move)
 
-        movelist.list.querySelector('.move.active')?.classList.remove('active')
-        const moveEl = movelist.findMoveElement(state.selected.move)
+        document.getElementById('moves').querySelector('.move.active')?.classList.remove('active')
+        const moveEl = movelist.getMoveElement(state.selected.move)
         if (moveEl !== null) moveEl.classList.add('active')
     },
     select(game: Game, move: Move | number[]) {

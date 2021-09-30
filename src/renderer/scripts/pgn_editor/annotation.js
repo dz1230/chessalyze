@@ -128,7 +128,7 @@ d3.selectAll('.nag-item').on('click', ev => {
         nagBtn.setAttribute('data-nag-curr', nagNr);
         nagBtn.parentElement.classList.add('list-group-item-primary');
     }
-    const moveEl = movelist_1.movelist.findMoveElement(state_1.state.selected.move);
+    const moveEl = movelist_1.movelist.getMoveElement(state_1.state.selected.move);
     if (moveEl !== null)
-        moveEl.innerText = movelist_1.movelist.getMovetext(state_1.state.selected.move);
+        moveEl.innerText = movelist_1.Movelist.getMovetext(state_1.state.selected.move);
 });

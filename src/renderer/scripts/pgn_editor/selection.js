@@ -114,8 +114,8 @@ exports.selection = {
         d3.select('#promotion_popup').style('display', 'none');
         annotation_1.comments.show(state_1.state.selected.move);
         annotation_1.nags.show(state_1.state.selected.move);
-        movelist_1.movelist.list.querySelector('.move.active')?.classList.remove('active');
-        const moveEl = movelist_1.movelist.findMoveElement(state_1.state.selected.move);
+        document.getElementById('moves').querySelector('.move.active')?.classList.remove('active');
+        const moveEl = movelist_1.movelist.getMoveElement(state_1.state.selected.move);
         if (moveEl !== null)
             moveEl.classList.add('active');
     },

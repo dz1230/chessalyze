@@ -18,7 +18,7 @@ import { nags, nagTable } from "../../scripts/pgn_editor/annotation"
 import { liEngine, uciengine } from "../../scripts/pgn_editor/engines"
 import { tags } from "../../scripts/pgn_editor/tags"
 import { appendGame, appendMove, deleteGame, deleteMove, deleteVariation, loadPgn, moveVariation } from "../../scripts/pgn_editor/mutations"
-import { movelist } from "../../scripts/pgn_editor/movelist"
+import { Movelist, movelist } from "../../scripts/pgn_editor/movelist"
 import { gamelist } from "../../scripts/pgn_editor/gamelist"
 import { selection } from "../../scripts/pgn_editor/selection"
 import { toasts } from "../../scripts/pgn_editor/toasts"
@@ -500,8 +500,8 @@ ipcRenderer.on('annotation', (ev, nag) => {
         state.selected.move.nags.push(nag)
     }
     nags.show(state.selected.move)
-    const moveEl = movelist.findMoveElement(state.selected.move)
-    if (moveEl !== null) moveEl.innerText = movelist.getMovetext(state.selected.move)
+    const moveEl = movelist.getMoveElement(state.selected.move)
+    if (moveEl !== null) moveEl.innerText = Movelist.getMovetext(state.selected.move)
 })
 ipcRenderer.on('cut-move', (ev) => {
     if (state.selected.move === null) return
@@ -524,7 +524,7 @@ ipcRenderer.on('cut-game', (ev) => {
 ipcRenderer.on('copy', (ev, descriptor) => {
     switch (descriptor) {
         case 'move':
-            if (state.selected.move !== null) clipboard.writeText(movelist.getMovetext(state.selected.move))
+            if (state.selected.move !== null) clipboard.writeText(Movelist.getMovetext(state.selected.move))
             else clipboard.writeText('')
             break
         case 'rav':
@@ -606,8 +606,8 @@ ipcRenderer.on('paste', (ev, descriptor) => {
             if (state.selected.move.nags === undefined) state.selected.move.nags = []
             if (!state.selected.move.nags.includes(nag)) state.selected.move.nags.push(nag)
             nags.show(state.selected.move)
-            const moveEl = movelist.findMoveElement(state.selected.move)
-            if (moveEl !== null) moveEl.innerText = movelist.getMovetext(state.selected.move)
+            const moveEl = movelist.getMoveElement(state.selected.move)
+            if (moveEl !== null) moveEl.innerText = Movelist.getMovetext(state.selected.move)
             break
         case 'epd':
             const epd = clipboard.readText()

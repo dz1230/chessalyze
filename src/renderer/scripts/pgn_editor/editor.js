@@ -519,9 +519,9 @@ electron_1.ipcRenderer.on('annotation', (ev, nag) => {
         state_1.state.selected.move.nags.push(nag);
     }
     annotation_1.nags.show(state_1.state.selected.move);
-    const moveEl = movelist_1.movelist.findMoveElement(state_1.state.selected.move);
+    const moveEl = movelist_1.movelist.getMoveElement(state_1.state.selected.move);
     if (moveEl !== null)
-        moveEl.innerText = movelist_1.movelist.getMovetext(state_1.state.selected.move);
+        moveEl.innerText = movelist_1.Movelist.getMovetext(state_1.state.selected.move);
 });
 electron_1.ipcRenderer.on('cut-move', (ev) => {
     if (state_1.state.selected.move === null)
@@ -549,7 +549,7 @@ electron_1.ipcRenderer.on('copy', (ev, descriptor) => {
     switch (descriptor) {
         case 'move':
             if (state_1.state.selected.move !== null)
-                electron_1.clipboard.writeText(movelist_1.movelist.getMovetext(state_1.state.selected.move));
+                electron_1.clipboard.writeText(movelist_1.Movelist.getMovetext(state_1.state.selected.move));
             else
                 electron_1.clipboard.writeText('');
             break;
@@ -640,9 +640,9 @@ electron_1.ipcRenderer.on('paste', (ev, descriptor) => {
             if (!state_1.state.selected.move.nags.includes(nag))
                 state_1.state.selected.move.nags.push(nag);
             annotation_1.nags.show(state_1.state.selected.move);
-            const moveEl = movelist_1.movelist.findMoveElement(state_1.state.selected.move);
+            const moveEl = movelist_1.movelist.getMoveElement(state_1.state.selected.move);
             if (moveEl !== null)
-                moveEl.innerText = movelist_1.movelist.getMovetext(state_1.state.selected.move);
+                moveEl.innerText = movelist_1.Movelist.getMovetext(state_1.state.selected.move);
             break;
         case 'epd':
             const epd = electron_1.clipboard.readText();

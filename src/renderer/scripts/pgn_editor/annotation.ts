@@ -1,7 +1,7 @@
 import d3 = require("d3")
 import { Move, Comment, Game } from "../../../common/pgn"
 import { state } from "../../scripts/pgn_editor/state"
-import { movelist } from "../../scripts/pgn_editor/movelist"
+import { Movelist, movelist } from "../../scripts/pgn_editor/movelist"
 import { appendGame } from "../../scripts/pgn_editor/mutations"
 
 export const comments = {
@@ -122,6 +122,6 @@ d3.selectAll('.nag-item').on('click', ev => {
         nagBtn.setAttribute('data-nag-curr', nagNr)
         nagBtn.parentElement.classList.add('list-group-item-primary')
     }
-    const moveEl = movelist.findMoveElement(state.selected.move)
-    if (moveEl !== null) moveEl.innerText = movelist.getMovetext(state.selected.move)
+    const moveEl = movelist.getMoveElement(state.selected.move)
+    if (moveEl !== null) moveEl.innerText = Movelist.getMovetext(state.selected.move)
 })
