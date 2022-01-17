@@ -4,7 +4,7 @@ const child_process_1 = require("child_process");
 const path_1 = require("path");
 const sharedstate_1 = require("./sharedstate");
 const windows_1 = require("./windows");
-//BUG there seem to be issues with parsing options, but only sometimes? (occured only with komodo 11 so far)
+//BUG there seem to be issues with parsing options, but only sometimes? (occured only with komodo 11 so far) (possibly only occurs between chunks)
 const parseOption = (line) => {
     if (line.startsWith('option'))
         line = line.substring(6);
