@@ -1,0 +1,317 @@
+File,Context,English,German
+menu.csv,"filemenu
+file menu",File,Datei
+menu.csv,"newfile
+new file",New,Neu
+menu.csv,"openfile
+open file",Open,Öffnen
+menu.csv,"recentDocuments
+recent documents",Recent,"Zuletzt verwendet"
+menu.csv,"clearRecentDocuments
+clear recent documents",Clear,Leeren
+menu.csv,"savefile
+save file",Save,Speichern
+menu.csv,"saveas
+save file as","Save as","Speichern unter"
+menu.csv,"exit
+exit program",Exit,Beenden
+menu.csv,"editmenu
+edit menu",Edit,Bearbeiten
+menu.csv,"cutmove
+cut move","Cut move","Zug entfernen"
+menu.csv,"variation
+edit variation menu",Variation,Variante
+menu.csv,"varmoveup
+move variation up","Move up","Nach oben"
+menu.csv,"varmovedown
+move variation down","Move down","Nach unten"
+menu.csv,"vardelete
+delete variation",Delete,Löschen
+menu.csv,"deletegame
+delete game","Delete game","Partie löschen"
+menu.csv,"copymenu
+copy menu",Copy,Kopieren
+menu.csv,"copymove
+copy move",Move,Zug
+menu.csv,"copyvar
+copy variation",Variation,Variante
+menu.csv,"copyrav
+copy recursive annotation variation","Variation RAV",RAV-Variante
+menu.csv,"copygame
+copy game",Game,Partie
+menu.csv,"copymovetext
+copy game movetext","Game movetext",Partie-Zugtext
+menu.csv,"copytags
+copy game tags","Game tags",Partie-Metadaten
+menu.csv,"copyfile
+copy file",File,Datei
+menu.csv,"copyminfile
+copy minimal file","Minimal file","Minimale Datei"
+menu.csv,"copyfen
+copy fen",FEN,FEN
+menu.csv,"copyepd
+copy epd",EPD,EPD
+menu.csv,"pastemenu
+paste menu",Paste,Einfügen
+menu.csv,"pasteannotation
+paste annotation",Annotation,Annotation
+menu.csv,"pastefen
+paste fen as new game","FEN (as new game)","FEN (als neue Partie)"
+menu.csv,"pasteepd
+paste epd as new game","EPD (as new game)","EPD (als neue Partie)"
+menu.csv,"annotationsmenu
+toggle annotations menu","Toggle annotations","Annotationen umschalten"
+menu.csv,"settingsmenu
+settings menu",Settings,Einstellungen
+menu.csv,"toolsmenu
+tools menu",Tools,Werkzeuge
+menu.csv,"enginesmenu
+engines menu",Engines,Engines
+menu.csv,"adduciengine
+add uci engine","Add UCI engine","Neue UCI-Engine"
+menu.csv,"importmenu
+import menu",Import,Importieren
+menu.csv,"importfromfile
+import from one or more files","From file(s)","Aus Datei(en)"
+menu.csv,"importfromlichess
+import from lichess.org","From lichess.org","Von lichess.org"
+menu.csv,"exportmenu
+export menu",Export,Exportieren
+menu.csv,"boardeditor
+board editor tool","Board Editor",Bretteditor
+menu.csv,"helpmenu
+help menu",Help,Hilfe
+menu.csv,"infowindow
+info window",Info,Info
+menu.csv,"bugreport
+bug report menu item","Report a bug","Bug melden"
+menu.csv,"openengine
+engine tool menu item",Open,Öffnen
+menu.csv,"enginesettings
+engine tool menu item",Settings,Einstellungen
+menu.csv,"deleteengine
+engine tool menu item",Delete,Löschen
+menu.csv,"exportfilteredgames
+filter and export games menu item","Filter games","Partien filtern"
+comments.csv,"commentstab
+comments tab title",Comments,Kommentare
+comments.csv,"newcommentplaceholder
+placeholder in new comment textarea","Write new comment here","Neuen Kommentar hier schreiben"
+annotation.csv,"annot_goodmove
+!","Good move","Guter Zug"
+annotation.csv,"annot_mistake
+?",Mistake,Fehler
+annotation.csv,"annot_brilliantmove
+!!","Brilliant move","Brillanter Zug"
+annotation.csv,"annot_interestingmove
+!?","Interesting move","Interessanter Zug"
+annotation.csv,"annot_dubiousmove
+?!","Dubious move","Dubioser Zug"
+annotation.csv,"annot_onlymove
+□","Only move","Einziger Zug"
+annotation.csv,"annot_zugzwang
+⨀",Zugzwang,Zugzwang
+annotation.csv,"annot_equalpos
+=","Equal position","Ausgeglichene Stellung"
+annotation.csv,annot_unclearpos,"Unclear position","Unklare Stellung"
+annotation.csv,"annot_whitebetter1
+white is slightly better","White is slightly better","Weiss steht etwas besser"
+annotation.csv,"annot_blackbetter1
+black is slightly better","Black is slightly better","Schwarz steht etwas besser"
+annotation.csv,"annot_whitebetter2
+white is better","White is better","Weiss steht besser"
+annotation.csv,"annot_blackbetter2
+black is better","Black is better","Schwarz steht besser"
+annotation.csv,"annot_whitewinning
+white is winning","White is winning","Weiss steht auf Gewinn"
+annotation.csv,"annot_blackwinning
+black is winning","Black is winning","Schwarz steht auf Gewinn"
+annotation.csv,"annot_novelty
+N",Novelty,Neuheit
+annotation.csv,annot_development,Development,Entwicklung
+annotation.csv,annot_initiative,Initiative,Initiative
+annotation.csv,annot_attack,Attack,Angriff
+annotation.csv,annot_counterplay,Counterplay,Gegenspiel
+annotation.csv,annot_timetrouble,"Time trouble",Zeitnot
+annotation.csv,annot_compensation,"With compensation","Mit Kompensation"
+annotation.csv,"annot_idea
+with the idea","With the idea","Mit der Idee"
+engine.csv,"enginedropdowntitle
+title of engine dropdown",Engine,Engine
+engine.csv,"enginenewtemplate
+button for creating new engine template","New engine template","Neue Engine-Vorlage"
+engine.csv,"enginenewuci
+title of new engine modal","New UCI engine","Neue UCI-Engine"
+engine.csv,"enginenewexecutable
+in new engine modal",Executable,Programmdatei
+engine.csv,"enginenewname
+in new engine modal",Name,Name
+engine.csv,"enginenewenableregistration
+in new engine modal","Enable registration","Registrierung aktivieren"
+engine.csv,"enginenewregistrationname
+in new engine modal","Registration name",Registrierungs-Name
+engine.csv,"enginenewregistrationcode
+in new engine modal","Registration code",Registrierungs-Code
+engine.csv,"enginenewcancel
+cancel new engine modal",Cancel,Abbrechen
+engine.csv,"enginenewsave
+in new engine modal",Save,Speichern
+engine.csv,"enginecloudanalysis
+lichess engine cloud analysis","Cloud analysis",Cloud-Analyse
+engine.csv,"engineexplorer
+lichess engine opening explorer",Explorer,Explorer
+engine.csv,"enginecloudanalysisloading
+lichess engine cloud analysis",Loading,Lädt
+engine.csv,"engineexploreravgrating
+lichess engine opening explorer","Avg. rating","Durchschn. Wertungszahl"
+engine.csv,"engineexplorerwdb
+lichess engine opening explorer","White win / Draw / Black win","Weißer Sieg / Remis / Schwarzer Sieg"
+engine.csv,"engineknodes
+lichess engine cloud analysis metric",kNodes,kNodes
+engine.csv,"enginescore
+engine metric",Score,Bewertung
+engine.csv,"enginedepth
+engine metric",Depth,Tiefe
+engine.csv,"enginebestmove
+engine metric","Best move","Bester Zug"
+engine.csv,"enginems
+engine metric","Time (ms)","Zeit (ms)"
+engine.csv,"enginecurrmove
+engine metric","Curr. move","Aktueller Zug"
+engine.csv,"enginecpu
+engine metric","CPU %","CPU %"
+engine.csv,"enginehash
+engine metric","Hash %","Hash %"
+engine.csv,"enginenodes
+engine metric",Nodes/s,Knoten/s
+engine.csv,"enginetbhits
+engine metric (tablebase hits)","TB hits",TB-Treffer
+engine.csv,"enginepvs
+engine principal variations","Principal variations",Hauptvarianten
+engine.csv,"enginestatus_uninitialized
+engine status",Uninitialized,Uninitialisiert
+engine.csv,"engineinitialize
+initialize engine button",Initialize,Initialisieren
+engine.csv,"engineshutdown
+engine shut down button","Shut down",Beenden
+engine.csv,"enginestatus_idle
+engine status",Idle,Untätig
+engine.csv,"enginestart
+engine start button",Start,Starten
+engine.csv,"enginestop
+engine stop button",Stop,Stoppen
+engine.csv,"engineoptions
+engine optios button",Options,Optionen
+engine.csv,"engineconfinstance
+engine config popup title for engine instance (not template). %s is the name of the engine","Configure %s instance","%s-Instanz konfigurieren"
+engine.csv,"engineconfigtemplate
+engine template config popup title","Configure %s template","%s-Vorlage konfigurieren"
+engine.csv,"engineconfsearch
+engine config","Search options",Sucheinstellungen
+engine.csv,"engineconfsearch_infinite
+infinite search",Infinite,Endlos
+engine.csv,"engineconfsearch_node
+max nodes search",Nodes,Knoten
+engine.csv,"engineconfsearch_depth
+max depth search",Depth,Tiefe
+engine.csv,"engineconfsearch_time
+max time search",Time,Zeit
+engine.csv,"engineconfsearch_depthplaceholder
+placeholder in depth input field","in plys","in Plys"
+engine.csv,"engineconfsearch_nodesplaceholder
+placeholder in nodes input field","in knodes","in tausend Knoten"
+engine.csv,"engineconfsearch_timeplaceholder
+placeholder in time input field","in seconds","in Sekunden"
+engine.csv,"engineconfother
+engine config","Other options","Weitere Einstellungen"
+engine.csv,"enginetemplateconf
+engine template config","Template data",Vorlagendaten
+engine.csv,"enginetemplateconf_executable
+engine template config",Executable,Programmdatei
+engine.csv,"enginetemplateconf_name
+engine template config",Name,Name
+engine.csv,"engineconfreset
+engine config reset button","Reset to defaults","Auf Standardwerte zurücksetzen"
+engine.csv,"engineconfcancel
+engine config cancel button",Cancel,Abbrechen
+engine.csv,"engineconfsave
+engine config save button",Save,Speichern
+engine.csv,"enginestatus_searching
+engine status",Searching,Sucht
+engine.csv,"enginecustombuttonstext
+in engine tab","Initialize the engine to show custom buttons","Initialisiere die Engine um eigene Schaltflächen anzuzeigen"
+tags.csv,"tagevent
+pgn tag",Event,Event
+tags.csv,"tagsite
+pgn tag",Site,Ort
+tags.csv,"tagdate
+pgn tag",Date,Datum
+tags.csv,"taground
+pgn tag",Round,Runde
+tags.csv,"tagwhite
+pgn tag",White,Weiss
+tags.csv,"tagblack
+pgn tag",Black,Schwarz
+tags.csv,"tagresult
+pgn tag",Result,Ergebnis
+tags.csv,"tagnameplaceholder
+placeholder for name of new tag",Name,Name
+tags.csv,"tagvalueplaceholder
+placeholder for value of new tag",Value,Wert
+tags.csv,"tagstab
+tags tab title",Tags,Metadaten
+games.csv,"games
+title of games dropdown",Games,Partien
+games.csv,"newgame
+new game button","New game","Neue Partie"
+pieces.csv,"moves
+title for moves tab",Moves,Züge
+pieces.csv,"san_knight
+letter for knight",N,S
+pieces.csv,"san_bishop
+letter for bishop",B,L
+pieces.csv,"san_rook
+letter for rook",R,T
+pieces.csv,"san_queen
+letter for queen",Q,D
+pieces.csv,"san_king
+letter for king",K,K
+clocks.csv,"anonplayer
+displayed name for an unknown player",Anonymous,Anonym
+board_editor.csv,be_position,Position,Position
+board_editor.csv,be_export,Export,Exportieren
+board_editor.csv,be_sfen,"Save .fen file as",".fen-Datei speichern unter"
+board_editor.csv,be_cfen,"Copy FEN","FEN kopieren"
+board_editor.csv,be_cbfen,"Copy board FEN","Brett-FEN kopieren"
+board_editor.csv,be_cepd,"Copy EPD","EPD kopieren"
+board_editor.csv,be_emptyboard,"Empty board","Brett leeren"
+board_editor.csv,be_toggleorientation,"Toggle orientation","Brett drehen"
+board_editor.csv,be_whitetomove,"White to move","Weiss am Zug"
+board_editor.csv,be_blacktomove,"Black to move","Schwarz am Zug"
+board_editor.csv,be_noenpassant,"No En-Passant","Kein En-Passant"
+board_editor.csv,be_emptypos,Empty,Leer
+board_editor.csv,be_initialpos,Initial,Ausgansposition
+board_editor.csv,endgame_lucena,"Lucena Endgame",Lucena-Endspiel
+board_editor.csv,opening_opengame,"Open Game","Offenes Spiel"
+board_editor.csv,opening_fourknights,"Four Knights Game",Vier-Springer-Spiel
+board_editor.csv,opening_italian,"Italian Game","Italienische Eröffnung"
+board_editor.csv,opening_evans,"Evans Gambit","Evans Gambit"
+board_editor.csv,opening_ruylopez,"Ruy Lopez","Ruy Lopez"
+board_editor.csv,opening_london,"London System","Londoner System"
+board_editor.csv,opening_catalan,"Catalan Opening","Katalanische Eröffnung"
+settings.csv,s_general,General,Allgemein
+settings.csv,s_rookcastling,"Rook castling","Rochade durch Königszug auf Turm"
+settings.csv,s_snaparrows,"Snap arrows to valid moves","Pfeil an gültige Züge einrasten"
+settings.csv,s_erasearrows,"Erase arrows on click","Pfeile bei Klick löschen"
+settings.csv,s_validdests,"Show valid destinations","Legale Züge anzeigen"
+settings.csv,s_showcoords,"Show board coordinates","Koordinaten anzeigen"
+settings.csv,s_engineconsolelines,"Lines in engine info console","Zeilen in Engine-Konsole"
+settings.csv,s_appearance,Appearance,Darstellung
+settings.csv,s_ghost,"Show piece ghost","Figur-Geist anzeigen"
+settings.csv,s_animations,"Piece animations","Züge animieren"
+settings.csv,s_lastmovehighlight,"Highlight last move","Letzten Zug hervorheben"
+settings.csv,s_highlightcheck,"Highlight check","Schachs hervorheben"
+settings.csv,s_theme,Theme,Theme
+settings.csv,s_board,Board,Brett
+settings.csv,s_pieces,Pieces,Figuren
+settings.csv,s_boardorientation,"Board orientation",Brettausrichtung
